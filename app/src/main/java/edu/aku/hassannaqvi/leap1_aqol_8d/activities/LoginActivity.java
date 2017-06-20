@@ -69,6 +69,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
     /**
      * A dummy authentication store containing known user names and passwords.
+     * TODO: check dbBackup.
+     */
+
+    /**
+     * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
@@ -109,6 +114,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
+//        Get data from wrapper app
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            String user = b.getString("userName_from_wrapper");
+            MainApp.userName = user;
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+
 
         try {
             long installedOn = this
@@ -499,16 +514,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                     MainApp.userName = mEmail;
                     MainApp.admin = mEmail.contains("@");
 
-                   /* if (!MainApp.regionDss.equals("") || (mEmail.equals("dmu@aku") && mPassword.equals("aku?dmu"))) {
-                        finish();
-
-                        Intent iLogin = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(iLogin);
-
-                        Toast.makeText(LoginActivity.this, "You are assigned to " + MainApp.regionDss + " Block", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "You are not assigned to any block", Toast.LENGTH_SHORT).show();
-                    }*/
+                    finish();
+                    Intent iLogin = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(iLogin);
 
                 } else {
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
