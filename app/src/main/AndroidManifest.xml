@@ -48,7 +48,7 @@
         <activity
             android:name=".activities.EndingActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".SectionAActivity"></activity>
+        <activity android:name=".activities.SectionAActivity" />
     </application>
 
 </manifest>

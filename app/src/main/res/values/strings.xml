@@ -12,6 +12,9 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
     completions."
   </string>
+  <string name="title_activity_splash_screen">Splash Screen Activity</string>
+  <string name="dummy_button">Dummy Button</string>
+  <string name="dummy_content">DUMMY\nCONTENT</string>
 
   <string name="yes"> ہاں yes</string>
   <string name="no">no نہیں </string>
@@ -22,10 +25,13 @@
   <string name="days"> دن days</string>
   <string name="reason"> دن </string>
 
+  <string name="end_interview"> اختتام </string>
+  <string name="start_interview"> انٹرویو شروع کریں </string>
   <string name="nextSection">NextSection اگلا سیکشن</string>
   <string name="endForm">اختتام EndForm</string>
   <string name="digits">1234567890.,+=-qwertyuiopasdfghjklzxcvbnm ?%#@!&amp;QWERTYUIOPASDFGHJKLZXCVBNM</string>
-    <!-- String related to section headings -->
+
+  <!-- String related to section headings -->
   <string name="Main">کیا حمل کے دوران فولاد کی کمی کو لیکٹوفرین سے علاج کے ذریعے ٹھیک کیا جانا چاہیے؟رینڈ مائزکنڑول ٹرائل</string>
   <string name="sectionA">اہلیت کی تفصیلات</string>
   <string name="AQ01">  آپ کے خیال میں آپ کے اندر کتنی توانائی ہے اپنے کاموں کو کرنے کے لیے </string>
@@ -239,7 +245,10 @@
   <string name="AQ35d">عموماً </string>
   <string name="AQ35e"> ہر وقت</string>
 
-
+  <string name="iStatus"> انٹرویو کی نوعیت</string>
+  <string name="status01">مکمل</string>
+  <string name="status02">نا مکمل</string>
+  <string name="status03">گھر بند تھا</string>
 
 
 </resources>

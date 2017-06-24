@@ -10,25 +10,27 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.aku.hassannaqvi.leap1_aqol_8d.R;
 import edu.aku.hassannaqvi.leap1_aqol_8d.core.DatabaseHelper;
-import edu.aku.hassannaqvi.leap1_aqol_8d.core.MainApp;
 
 public class EndingActivity extends Activity {
 
     private static final String TAG = EndingActivity.class.getSimpleName();
-    @BindView(R.id.scrollView01)
-    ScrollView scrollView01;
-    @BindView(R.id.dcstatus)
-    RadioGroup dcstatus;
-    @BindView(R.id.dcstatus01)
-    RadioButton dcstatus01;
-    @BindView(R.id.dcstatus02)
-    RadioButton dcstatus02;
+
+    @BindView(R.id.activity_section_ending)
+    ScrollView activitySectionEnding;
+    @BindView(R.id.iStatus)
+    RadioGroup iStatus;
+    @BindView(R.id.status01)
+    RadioButton status01;
+    @BindView(R.id.status02)
+    RadioButton status02;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +41,13 @@ public class EndingActivity extends Activity {
         Boolean check = getIntent().getExtras().getBoolean("check");
 
         if (check) {
-            dcstatus01.setEnabled(true);
-            dcstatus02.setEnabled(false);
+            status01.setEnabled(true);
+            status02.setEnabled(false);
 
         } else {
             //fldGrpmn0823Reason.setVisibility(View.GONE);
-            dcstatus01.setEnabled(false);
-            dcstatus02.setEnabled(true);
+            status01.setEnabled(false);
+            status02.setEnabled(true);
 
 
         }
@@ -55,7 +57,7 @@ public class EndingActivity extends Activity {
     @OnClick(R.id.btn_End)
     void onBtnEndClick() {
 
-        Toast.makeText(this, "Processing This Section", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Processing Closing Section", Toast.LENGTH_SHORT).show();
         if (formValidation()) {
             try {
                 SaveDraft();
@@ -63,46 +65,24 @@ public class EndingActivity extends Activity {
                 e.printStackTrace();
             }
             if (UpdateDB()) {
-
-                MainApp.memFlag = 0;
-
-                MainApp.NoMembersCount = 0;
-                MainApp.NoMaleCount = 0;
-                MainApp.NoFemaleCount = 0;
-                MainApp.NoBoyCount = 0;
-                MainApp.NoGirlCount = 0;
-
-                MainApp.TotalMembersCount = 0;
-                MainApp.TotalMaleCount = 0;
-                MainApp.TotalFemaleCount = 0;
-                MainApp.TotalBoyCount = 0;
-                MainApp.TotalGirlCount = 0;
-
-//    Total No of Alive members got from Section B
-                MainApp.currentStatusCount = 0;
-                MainApp.currentDeceasedCheck = 0;
-                MainApp.currentMotherCheck = 0;
-
-                MainApp.selectedPos = -1;
-
-
-
-
                 finish();
-
+                Toast.makeText(this, "Closing Form!", Toast.LENGTH_SHORT).show();
                 Intent endSec = new Intent(this, MainActivity.class);
-                endSec.putExtra("complete", false);
+                //AppMain.mnb1 = "TEST";
                 startActivity(endSec);
             } else {
                 Toast.makeText(this, "Failed to Update Database!", Toast.LENGTH_SHORT).show();
             }
+            //}
         }
     }
 
     private void SaveDraft() throws JSONException {
         Toast.makeText(this, "Saving Draft for  This Section", Toast.LENGTH_SHORT).show();
 
-        MainApp.fc.setIstatus(dcstatus01.isChecked() ? "1" : dcstatus02.isChecked() ? "2" : "0");
+        JSONObject se = new JSONObject();
+        se.put("iStatus", status01.isChecked() ? "1" : status02.isChecked() ? "2" : "0");
+
 
         Toast.makeText(this, "Validation Successful! - Saving Draft...", Toast.LENGTH_SHORT).show();
     }
@@ -110,28 +90,35 @@ public class EndingActivity extends Activity {
     private boolean UpdateDB() {
         DatabaseHelper db = new DatabaseHelper(this);
 
-        int updcount = db.updateEnding();
+      /*  long updcount = db.addForm(AppMain.fc);
 
-        if (updcount == 1) {
+        AppMain.fc.setID(String.valueOf(updcount));
+
+        if (updcount != 0) {
             Toast.makeText(this, "Updating Database... Successful!", Toast.LENGTH_SHORT).show();
-            return true;
+
+            AppMain.fc.setUID(
+                    (AppMain.fc.getDeviceID() + AppMain.fc.getID()));
+            db.updateFormID();
+
         } else {
             Toast.makeText(this, "Updating Database... ERROR!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        }*/
+        return true;
 
     }
+
 
     private boolean formValidation() {
         Toast.makeText(this, "Validating This Section ", Toast.LENGTH_SHORT).show();
 
-        if (dcstatus.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "ERROR(Not Selected): " + getString(R.string.dcstatus), Toast.LENGTH_LONG).show();
-            dcstatus02.setError("Please Select One");    // Set Error on last radio button
-            Log.i(TAG, "dcstatus: This data is Required!");
+        if (iStatus.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "ERROR(not selected): " + getResources().getResourceTypeName(R.string.endForm), Toast.LENGTH_LONG).show();
+            status02.setError("This data is Required!");
+            Log.i(TAG, "istatus: This data is Required!");
             return false;
         } else {
-            dcstatus02.setError(null);
+            status02.setError(null);
         }
 
 
