@@ -9,15 +9,13 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-    completions."
-  </string>
+  <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
   <string name="title_activity_splash_screen">Splash Screen Activity</string>
   <string name="dummy_button">Dummy Button</string>
   <string name="dummy_content">DUMMY\nCONTENT</string>
 
-  <string name="yes"> ہاں yes</string>
-  <string name="no">no نہیں </string>
+  <string name="yes"> ہاں </string>
+  <string name="no"> نہیں </string>
   <string name="dkn"> معلوم نہیں </string>
   <string name="other">other دیگر (وضاحت کریں) </string>
   <string name="none"> کچھ نہیں </string>
@@ -31,7 +29,7 @@
   <string name="endForm">اختتام EndForm</string>
   <string name="digits">1234567890.,+=-qwertyuiopasdfghjklzxcvbnm ?%#@!&amp;QWERTYUIOPASDFGHJKLZXCVBNM</string>
 
-  <!-- String related to section headings -->
+
   <string name="Main">کیا حمل کے دوران فولاد کی کمی کو لیکٹوفرین سے علاج کے ذریعے ٹھیک کیا جانا چاہیے؟رینڈ مائزکنڑول ٹرائل</string>
   <string name="sectionA">اہلیت کی تفصیلات</string>
   <string name="AQ01">  آپ کے خیال میں آپ کے اندر کتنی توانائی ہے اپنے کاموں کو کرنے کے لیے </string>
