@@ -1,9 +1,14 @@
 package edu.aku.hassannaqvi.leap1_aqol_8d.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.text.format.DateFormat;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -13,11 +18,15 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import edu.aku.hassannaqvi.leap1_aqol_8d.R;
+import edu.aku.hassannaqvi.leap1_aqol_8d.contracts.FormsContract;
 import edu.aku.hassannaqvi.leap1_aqol_8d.core.DatabaseHelper;
+import edu.aku.hassannaqvi.leap1_aqol_8d.core.MainApp;
 
 public class SectionAActivity extends Activity {
 
@@ -25,6 +34,8 @@ public class SectionAActivity extends Activity {
 
     @BindView(R.id.activity_section_a)
     ScrollView activitySectionA;
+    @BindView(R.id.studyID)
+    EditText studyID;
     @BindView(R.id.aQ01)
     RadioGroup aQ01;
     @BindView(R.id.aQ01a)
@@ -505,20 +516,21 @@ public class SectionAActivity extends Activity {
     private boolean UpdateDB() {
         DatabaseHelper db = new DatabaseHelper(this);
 
-      /*  long updcount = db.addForm(AppMain.fc);
+        long updcount = db.addForm(MainApp.fc);
 
-        AppMain.fc.setID(String.valueOf(updcount));
+        MainApp.fc.set_ID(String.valueOf(updcount));
 
         if (updcount != 0) {
             Toast.makeText(this, "Updating Database... Successful!", Toast.LENGTH_SHORT).show();
 
-            AppMain.fc.setUID(
-                    (AppMain.fc.getDeviceID() + AppMain.fc.getID()));
+            MainApp.fc.set_UID(
+                    (MainApp.fc.getDeviceID() + MainApp.fc.get_ID()));
             db.updateFormID();
 
         } else {
             Toast.makeText(this, "Updating Database... ERROR!", Toast.LENGTH_SHORT).show();
-        }*/
+        }
+
         return true;
 
     }
@@ -527,46 +539,61 @@ public class SectionAActivity extends Activity {
     private void SaveDraft() throws JSONException {
         Toast.makeText(this, "Saving Draft for this Section", Toast.LENGTH_SHORT).show();
 
+        SharedPreferences sharedPref = getSharedPreferences("tagName", MODE_PRIVATE);
+
+        MainApp.fc = new FormsContract();
+
+        MainApp.fc.setUsername(MainApp.username);
+        MainApp.fc.setDevicetagID(sharedPref.getString("tagName", null));
+        MainApp.fc.setDeviceID(Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID));
+        MainApp.fc.setFormDate((DateFormat.format("dd-MM-yyyy HH:mm", new Date())).toString());
+        //MainApp.fc.setTagId(sharedPref.getString("tagName", ""));
+
+        MainApp.fc.setStudyID(studyID.getText().toString());
+
         JSONObject sa = new JSONObject();
 
-        sa.put("AQ01", aQ01a.isChecked() ? "1" : aQ01b.isChecked() ? "2" : aQ01c.isChecked() ? "3" : aQ01d.isChecked() ? "4" : aQ01e.isChecked() ? "5" : "0");
-        sa.put("AQ02", aQ02a.isChecked() ? "1" : aQ02b.isChecked() ? "2" : aQ02c.isChecked() ? "3" : aQ02d.isChecked() ? "4" : aQ02e.isChecked() ? "5" : "0");
-        sa.put("AQ03", aQ03a.isChecked() ? "1" : aQ03b.isChecked() ? "2" : aQ03c.isChecked() ? "3" : aQ03d.isChecked() ? "4" : aQ03e.isChecked() ? "5" : "0");
-        sa.put("AQ04", aQ04a.isChecked() ? "1" : aQ04b.isChecked() ? "2" : aQ04c.isChecked() ? "3" : aQ04d.isChecked() ? "4" : "0");
-        sa.put("AQ05", aQ05a.isChecked() ? "1" : aQ05b.isChecked() ? "2" : aQ05c.isChecked() ? "3" : aQ05d.isChecked() ? "4" : aQ05e.isChecked() ? "5" : "0");
-        sa.put("AQ06", aQ06a.isChecked() ? "1" : aQ06b.isChecked() ? "2" : aQ06c.isChecked() ? "3" : aQ06d.isChecked() ? "4" : "0");
-        sa.put("AQ07", aQ07a.isChecked() ? "1" : aQ07b.isChecked() ? "2" : aQ07c.isChecked() ? "3" : aQ07d.isChecked() ? "4" : aQ07e.isChecked() ? "5" : "0");
-        sa.put("AQ08", aQ08a.isChecked() ? "1" : aQ08b.isChecked() ? "2" : aQ08c.isChecked() ? "3" : aQ08d.isChecked() ? "4" : aQ08e.isChecked() ? "5" : "0");
-        sa.put("AQ09", aQ09a.isChecked() ? "1" : aQ09b.isChecked() ? "2" : aQ09c.isChecked() ? "3" : aQ09d.isChecked() ? "4" : "0");
-        sa.put("AQ10", aQ10a.isChecked() ? "1" : aQ10b.isChecked() ? "2" : aQ10c.isChecked() ? "3" : aQ10d.isChecked() ? "4" : aQ10e.isChecked() ? "5" : "0");
-        sa.put("AQ11", aQ11a.isChecked() ? "1" : aQ11b.isChecked() ? "2" : aQ11c.isChecked() ? "3" : aQ11d.isChecked() ? "4" : "0");
-        sa.put("AQ12", aQ12a.isChecked() ? "1" : aQ12b.isChecked() ? "2" : aQ12c.isChecked() ? "3" : aQ12d.isChecked() ? "4" : aQ12e.isChecked() ? "5" : "0");
-        sa.put("AQ13", aQ13a.isChecked() ? "1" : aQ13b.isChecked() ? "2" : aQ13c.isChecked() ? "3" : aQ13d.isChecked() ? "4" : aQ13e.isChecked() ? "5" : "0");
-        sa.put("AQ14", aQ14a.isChecked() ? "1" : aQ14b.isChecked() ? "2" : aQ14c.isChecked() ? "3" : aQ14d.isChecked() ? "4" : aQ14e.isChecked() ? "5" : "0");
-        sa.put("AQ15", aQ15a.isChecked() ? "1" : aQ15b.isChecked() ? "2" : aQ15c.isChecked() ? "3" : aQ15d.isChecked() ? "4" : aQ15e.isChecked() ? "5" : "0");
-        sa.put("AQ16", aQ16a.isChecked() ? "1" : aQ16b.isChecked() ? "2" : aQ16c.isChecked() ? "3" : aQ16d.isChecked() ? "4" : aQ16e.isChecked() ? "5" : "0");
-        sa.put("AQ17", aQ17a.isChecked() ? "1" : aQ17b.isChecked() ? "2" : aQ17c.isChecked() ? "3" : aQ17d.isChecked() ? "4" : aQ17e.isChecked() ? "5" : "0");
-        sa.put("AQ18", aQ18a.isChecked() ? "1" : aQ18b.isChecked() ? "2" : aQ18c.isChecked() ? "3" : aQ18d.isChecked() ? "4" : aQ18e.isChecked() ? "5" : "0");
-        sa.put("AQ19", aQ19a.isChecked() ? "1" : aQ19b.isChecked() ? "2" : aQ19c.isChecked() ? "3" : aQ19d.isChecked() ? "4" : aQ19e.isChecked() ? "5" : "0");
-        sa.put("AQ20", aQ20a.isChecked() ? "1" : aQ20b.isChecked() ? "2" : aQ20c.isChecked() ? "3" : aQ20d.isChecked() ? "4" : aQ20e.isChecked() ? "5" : "0");
-        sa.put("AQ21", aQ21a.isChecked() ? "1" : aQ21b.isChecked() ? "2" : aQ21c.isChecked() ? "3" : aQ21d.isChecked() ? "4" : aQ21e.isChecked() ? "5" : "0");
-        sa.put("AQ22", aQ22a.isChecked() ? "1" : aQ22b.isChecked() ? "2" : aQ22c.isChecked() ? "3" : aQ22d.isChecked() ? "4" : "0");
-        sa.put("AQ23", aQ23a.isChecked() ? "1" : aQ23b.isChecked() ? "2" : aQ23c.isChecked() ? "3" : aQ23d.isChecked() ? "4" : aQ23e.isChecked() ? "5" : "0");
-        sa.put("AQ24", aQ24a.isChecked() ? "1" : aQ24b.isChecked() ? "2" : aQ24c.isChecked() ? "3" : aQ24d.isChecked() ? "4" : aQ24e.isChecked() ? "5" : "0");
-        sa.put("AQ25", aQ25a.isChecked() ? "1" : aQ25b.isChecked() ? "2" : aQ25c.isChecked() ? "3" : aQ25d.isChecked() ? "4" : aQ25e.isChecked() ? "5" : "0");
-        sa.put("AQ26", aQ26a.isChecked() ? "1" : aQ26b.isChecked() ? "2" : aQ26c.isChecked() ? "3" : aQ26d.isChecked() ? "4" : aQ26e.isChecked() ? "5" : "0");
-        sa.put("AQ27", aQ27a.isChecked() ? "1" : aQ27b.isChecked() ? "2" : aQ27c.isChecked() ? "3" : aQ27d.isChecked() ? "4" : aQ27e.isChecked() ? "5" : "0");
-        sa.put("AQ28", aQ28a.isChecked() ? "1" : aQ28b.isChecked() ? "2" : aQ28c.isChecked() ? "3" : aQ28d.isChecked() ? "4" : aQ28e.isChecked() ? "5" : "0");
-        sa.put("AQ29", aQ29a.isChecked() ? "1" : aQ29b.isChecked() ? "2" : aQ29c.isChecked() ? "3" : aQ29d.isChecked() ? "4" : aQ29e.isChecked() ? "5" : "0");
-        sa.put("AQ30", aQ30a.isChecked() ? "1" : aQ30b.isChecked() ? "2" : aQ30c.isChecked() ? "3" : aQ30d.isChecked() ? "4" : aQ30e.isChecked() ? "5" : "0");
-        sa.put("AQ31", aQ31a.isChecked() ? "1" : aQ31b.isChecked() ? "2" : aQ31c.isChecked() ? "3" : aQ31d.isChecked() ? "4" : aQ31e.isChecked() ? "5" : "0");
-        sa.put("AQ32", aQ32a.isChecked() ? "1" : aQ32b.isChecked() ? "2" : aQ32c.isChecked() ? "3" : aQ32d.isChecked() ? "4" : aQ32e.isChecked() ? "5" : "0");
-        sa.put("AQ33", aQ33a.isChecked() ? "1" : aQ33b.isChecked() ? "2" : aQ33c.isChecked() ? "3" : aQ33d.isChecked() ? "4" : aQ33e.isChecked() ? "5" : aQ33f.isChecked() ? "5" : "0");
-        sa.put("AQ34", aQ34a.isChecked() ? "1" : aQ34b.isChecked() ? "2" : aQ34c.isChecked() ? "3" : aQ34d.isChecked() ? "4" : aQ34e.isChecked() ? "5" : "0");
-        sa.put("AQ35", aQ35a.isChecked() ? "1" : aQ35b.isChecked() ? "2" : aQ35c.isChecked() ? "3" : aQ35d.isChecked() ? "4" : aQ35e.isChecked() ? "5" : "0");
+        sa.put("aQ01", aQ01a.isChecked() ? "1" : aQ01b.isChecked() ? "2" : aQ01c.isChecked() ? "3" : aQ01d.isChecked() ? "4" : aQ01e.isChecked() ? "5" : "0");
+        sa.put("aQ02", aQ02a.isChecked() ? "1" : aQ02b.isChecked() ? "2" : aQ02c.isChecked() ? "3" : aQ02d.isChecked() ? "4" : aQ02e.isChecked() ? "5" : "0");
+        sa.put("aQ03", aQ03a.isChecked() ? "1" : aQ03b.isChecked() ? "2" : aQ03c.isChecked() ? "3" : aQ03d.isChecked() ? "4" : aQ03e.isChecked() ? "5" : "0");
+        sa.put("aQ04", aQ04a.isChecked() ? "1" : aQ04b.isChecked() ? "2" : aQ04c.isChecked() ? "3" : aQ04d.isChecked() ? "4" : "0");
+        sa.put("aQ05", aQ05a.isChecked() ? "1" : aQ05b.isChecked() ? "2" : aQ05c.isChecked() ? "3" : aQ05d.isChecked() ? "4" : aQ05e.isChecked() ? "5" : "0");
+        sa.put("aQ06", aQ06a.isChecked() ? "1" : aQ06b.isChecked() ? "2" : aQ06c.isChecked() ? "3" : aQ06d.isChecked() ? "4" : "0");
+        sa.put("aQ07", aQ07a.isChecked() ? "1" : aQ07b.isChecked() ? "2" : aQ07c.isChecked() ? "3" : aQ07d.isChecked() ? "4" : aQ07e.isChecked() ? "5" : "0");
+        sa.put("aQ08", aQ08a.isChecked() ? "1" : aQ08b.isChecked() ? "2" : aQ08c.isChecked() ? "3" : aQ08d.isChecked() ? "4" : aQ08e.isChecked() ? "5" : "0");
+        sa.put("aQ09", aQ09a.isChecked() ? "1" : aQ09b.isChecked() ? "2" : aQ09c.isChecked() ? "3" : aQ09d.isChecked() ? "4" : "0");
+        sa.put("aQ10", aQ10a.isChecked() ? "1" : aQ10b.isChecked() ? "2" : aQ10c.isChecked() ? "3" : aQ10d.isChecked() ? "4" : aQ10e.isChecked() ? "5" : "0");
+        sa.put("aQ11", aQ11a.isChecked() ? "1" : aQ11b.isChecked() ? "2" : aQ11c.isChecked() ? "3" : aQ11d.isChecked() ? "4" : "0");
+        sa.put("aQ12", aQ12a.isChecked() ? "1" : aQ12b.isChecked() ? "2" : aQ12c.isChecked() ? "3" : aQ12d.isChecked() ? "4" : aQ12e.isChecked() ? "5" : "0");
+        sa.put("aQ13", aQ13a.isChecked() ? "1" : aQ13b.isChecked() ? "2" : aQ13c.isChecked() ? "3" : aQ13d.isChecked() ? "4" : aQ13e.isChecked() ? "5" : "0");
+        sa.put("aQ14", aQ14a.isChecked() ? "1" : aQ14b.isChecked() ? "2" : aQ14c.isChecked() ? "3" : aQ14d.isChecked() ? "4" : aQ14e.isChecked() ? "5" : "0");
+        sa.put("aQ15", aQ15a.isChecked() ? "1" : aQ15b.isChecked() ? "2" : aQ15c.isChecked() ? "3" : aQ15d.isChecked() ? "4" : aQ15e.isChecked() ? "5" : "0");
+        sa.put("aQ16", aQ16a.isChecked() ? "1" : aQ16b.isChecked() ? "2" : aQ16c.isChecked() ? "3" : aQ16d.isChecked() ? "4" : aQ16e.isChecked() ? "5" : "0");
+        sa.put("aQ17", aQ17a.isChecked() ? "1" : aQ17b.isChecked() ? "2" : aQ17c.isChecked() ? "3" : aQ17d.isChecked() ? "4" : aQ17e.isChecked() ? "5" : "0");
+        sa.put("aQ18", aQ18a.isChecked() ? "1" : aQ18b.isChecked() ? "2" : aQ18c.isChecked() ? "3" : aQ18d.isChecked() ? "4" : aQ18e.isChecked() ? "5" : "0");
+        sa.put("aQ19", aQ19a.isChecked() ? "1" : aQ19b.isChecked() ? "2" : aQ19c.isChecked() ? "3" : aQ19d.isChecked() ? "4" : aQ19e.isChecked() ? "5" : "0");
+        sa.put("aQ20", aQ20a.isChecked() ? "1" : aQ20b.isChecked() ? "2" : aQ20c.isChecked() ? "3" : aQ20d.isChecked() ? "4" : aQ20e.isChecked() ? "5" : "0");
+        sa.put("aQ21", aQ21a.isChecked() ? "1" : aQ21b.isChecked() ? "2" : aQ21c.isChecked() ? "3" : aQ21d.isChecked() ? "4" : aQ21e.isChecked() ? "5" : "0");
+        sa.put("aQ22", aQ22a.isChecked() ? "1" : aQ22b.isChecked() ? "2" : aQ22c.isChecked() ? "3" : aQ22d.isChecked() ? "4" : "0");
+        sa.put("aQ23", aQ23a.isChecked() ? "1" : aQ23b.isChecked() ? "2" : aQ23c.isChecked() ? "3" : aQ23d.isChecked() ? "4" : aQ23e.isChecked() ? "5" : "0");
+        sa.put("aQ24", aQ24a.isChecked() ? "1" : aQ24b.isChecked() ? "2" : aQ24c.isChecked() ? "3" : aQ24d.isChecked() ? "4" : aQ24e.isChecked() ? "5" : "0");
+        sa.put("aQ25", aQ25a.isChecked() ? "1" : aQ25b.isChecked() ? "2" : aQ25c.isChecked() ? "3" : aQ25d.isChecked() ? "4" : aQ25e.isChecked() ? "5" : "0");
+        sa.put("aQ26", aQ26a.isChecked() ? "1" : aQ26b.isChecked() ? "2" : aQ26c.isChecked() ? "3" : aQ26d.isChecked() ? "4" : aQ26e.isChecked() ? "5" : "0");
+        sa.put("aQ27", aQ27a.isChecked() ? "1" : aQ27b.isChecked() ? "2" : aQ27c.isChecked() ? "3" : aQ27d.isChecked() ? "4" : aQ27e.isChecked() ? "5" : "0");
+        sa.put("aQ28", aQ28a.isChecked() ? "1" : aQ28b.isChecked() ? "2" : aQ28c.isChecked() ? "3" : aQ28d.isChecked() ? "4" : aQ28e.isChecked() ? "5" : "0");
+        sa.put("aQ29", aQ29a.isChecked() ? "1" : aQ29b.isChecked() ? "2" : aQ29c.isChecked() ? "3" : aQ29d.isChecked() ? "4" : aQ29e.isChecked() ? "5" : "0");
+        sa.put("aQ30", aQ30a.isChecked() ? "1" : aQ30b.isChecked() ? "2" : aQ30c.isChecked() ? "3" : aQ30d.isChecked() ? "4" : aQ30e.isChecked() ? "5" : "0");
+        sa.put("aQ31", aQ31a.isChecked() ? "1" : aQ31b.isChecked() ? "2" : aQ31c.isChecked() ? "3" : aQ31d.isChecked() ? "4" : aQ31e.isChecked() ? "5" : "0");
+        sa.put("aQ32", aQ32a.isChecked() ? "1" : aQ32b.isChecked() ? "2" : aQ32c.isChecked() ? "3" : aQ32d.isChecked() ? "4" : aQ32e.isChecked() ? "5" : "0");
+        sa.put("aQ33", aQ33a.isChecked() ? "1" : aQ33b.isChecked() ? "2" : aQ33c.isChecked() ? "3" : aQ33d.isChecked() ? "4" : aQ33e.isChecked() ? "5" : aQ33f.isChecked() ? "5" : "0");
+        sa.put("aQ34", aQ34a.isChecked() ? "1" : aQ34b.isChecked() ? "2" : aQ34c.isChecked() ? "3" : aQ34d.isChecked() ? "4" : aQ34e.isChecked() ? "5" : "0");
+        sa.put("aQ35", aQ35a.isChecked() ? "1" : aQ35b.isChecked() ? "2" : aQ35c.isChecked() ? "3" : aQ35d.isChecked() ? "4" : aQ35e.isChecked() ? "5" : "0");
 
+        setGPS();
 
-        //  AppMain.fc.setsA(String.valueOf(sa));
+        MainApp.fc.setsA(String.valueOf(sa));
+
         Toast.makeText(this, "Validation Successful! - Saving Draft...", Toast.LENGTH_SHORT).show();
     }
 
@@ -888,8 +915,39 @@ public class SectionAActivity extends Activity {
         } else {
             aQ35e.setError(null);
         }
-
         return true;
+    }
+
+    public void setGPS() {
+        SharedPreferences GPSPref = getSharedPreferences("GPSCoordinates", Context.MODE_PRIVATE);
+
+//        String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(GPSPref.getString("Time", "0"))).toString();
+
+        try {
+            String lat = GPSPref.getString("Latitude", "0");
+            String lang = GPSPref.getString("Longitude", "0");
+            String acc = GPSPref.getString("Accuracy", "0");
+            String dt = GPSPref.getString("Time", "0");
+
+            if (lat == "0" && lang == "0") {
+                Toast.makeText(this, "Could not obtained GPS points", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "GPS set", Toast.LENGTH_SHORT).show();
+            }
+
+            String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(GPSPref.getString("Time", "0"))).toString();
+
+            MainApp.fc.setGpsLat(GPSPref.getString("Latitude", "0"));
+            MainApp.fc.setGpsLng(GPSPref.getString("Longitude", "0"));
+            MainApp.fc.setGpsAcc(GPSPref.getString("Accuracy", "0"));
+//            AppMain.fc.setGpsTime(GPSPref.getString(date, "0")); // Timestamp is converted to date above
+            MainApp.fc.setGpsDT(date); // Timestamp is converted to date above
+
+            Toast.makeText(this, "GPS set", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Log.e(TAG, "setGPS: " + e.getMessage());
+        }
 
     }
 

@@ -1,25 +1,21 @@
 package edu.aku.hassannaqvi.leap1_aqol_8d.core;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import edu.aku.hassannaqvi.leap1_aqol_8d.activities.EndingActivity;
 import edu.aku.hassannaqvi.leap1_aqol_8d.contracts.FormsContract;
 
 /**
@@ -30,7 +26,7 @@ public class MainApp extends Application {
 
     public static final String _IP = "43.245.131.159"; // Test PHP server
     public static final Integer _PORT = 8080; // Port - with colon (:)
-    public static final String _HOST_URL = "http://" + MainApp._IP + ":" + MainApp._PORT + "/leap1/api/";
+    public static final String PROJECT_URI = "http://" + MainApp._IP + ":" + MainApp._PORT + "/leap1/api";
 
     /*
         public static final String _IP = "43.245.131.159"; // Test server
@@ -56,47 +52,22 @@ public class MainApp extends Application {
     public static String deviceId;
 
     public static Boolean admin = false;
-    public static String interviewerCode;
-    public static int loginFieldArea = -1;
-    public static String child_name = "TEST";
+    public static int mna3 = -1;
+    public static String mnb1 = "TEST";
+    public static int chCount = 0;
+    public static int chTotal = 0;
+    public static boolean scanned = false;
     public static FormsContract fc;
-    public static String userName = "0000";
-    public static String areaCode;
-//    Total No of members got from Section A
-    public static int NoMembersCount = 0;
-    public static int NoMaleCount = 0;
-    public static int NoFemaleCount = 0;
-    public static int NoBoyCount = 0;
-    public static int NoGirlCount = 0;
+    public static SharedPreferences sharedPref;
+    public static String enrollDate;
 
-    public static int TotalMembersCount = 0;
-    public static int TotalMaleCount = 0;
-    public static int TotalFemaleCount = 0;
-    public static int TotalBoyCount = 0;
-    public static int TotalGirlCount = 0;
-
-//    Total No of Alive members got from Section B
-    public static int currentStatusCount = 0;
-    public static int currentDeceasedCheck = 0;
-    public static int currentMotherCheck = 0;
-    //    Ali
-
-    public static int mm = 1;
-    public static int totalChild = 0;
-    public static int memFlag = 0;
-    public static List<Integer> memClicked;
-
-    public static int position = 0;
-    protected static LocationManager locationManager;
-
-    public static double selectedCHILD = 24;
-    public static int selectedPos = -1;
-
-    public static int selectedCh = -1;
-
-
+    public static String username = "";
+    public static String studyID = "";
+    public static long installedOn;
+    public static Integer versionCode;
+    public static String versionName;
     public static List<String> insertMem;
-
+    protected LocationManager locationManager;
     Location location;
 
     @Override
@@ -115,132 +86,30 @@ public class MainApp extends Application {
                 LocationManager.GPS_PROVIDER,
                 MINIMUM_TIME_BETWEEN_UPDATES,
                 MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
-                new GPSLocationListener() // Implement this class from code
+                new MyLocationListener()// Implement this class from code
 
         );
 
+        sharedPref = getSharedPreferences("PSUCodes", Context.MODE_PRIVATE);
 
-//        Initialize Dead Member List
-//        deadMembers = new ArrayList<String>();
-
-    }
-
-    public static int monthsBetweenDates(Date startDate, Date endDate){
-
-        Calendar start = Calendar.getInstance();
-        start.setTime(startDate);
-
-        Calendar end = Calendar.getInstance();
-        end.setTime(endDate);
-
-        int monthsBetween = 0;
-        int dateDiff = end.get(Calendar.DAY_OF_MONTH)-start.get(Calendar.DAY_OF_MONTH);
-
-        if(dateDiff<0) {
-            int borrrow = end.getActualMaximum(Calendar.DAY_OF_MONTH);
-            dateDiff = (end.get(Calendar.DAY_OF_MONTH)+borrrow)-start.get(Calendar.DAY_OF_MONTH);
-            monthsBetween--;
-
-            if(dateDiff>0) {
-                monthsBetween++;
-            }
+        try {
+            installedOn = this
+                    .getPackageManager()
+                    .getPackageInfo(getPackageName(), 0)
+                    .lastUpdateTime;
+            versionCode = this
+                    .getPackageManager()
+                    .getPackageInfo(getPackageName(), 0)
+                    .versionCode;
+            versionName = this
+                    .getPackageManager()
+                    .getPackageInfo(getPackageName(), 0)
+                    .versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
-        monthsBetween += end.get(Calendar.MONTH)-start.get(Calendar.MONTH);
-        monthsBetween  += (end.get(Calendar.YEAR)-start.get(Calendar.YEAR))*12;
-        return monthsBetween;
     }
-
-    public static void errorCheck(final Context context, String error){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-        alertDialogBuilder
-                .setMessage(error)
-                .setCancelable(false)
-                .setPositiveButton("Ok",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                                dialog.cancel();
-                            }
-                        });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    public static void errorCountDialog(final Context context, final Activity activity, String error){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-        alertDialogBuilder
-                .setMessage(error)
-                .setCancelable(false)
-                .setPositiveButton("Discard",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-//                                MainApp.memFlag--;
-                                activity.finish();
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    public static void finishActivity(final Context context, final Activity activity){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-        alertDialogBuilder
-                .setMessage("Do you want to Exit??")
-                .setCancelable(false)
-                .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                                activity.finish();
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    public static void endActivity(final Context context, final Activity activity){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                context);
-        alertDialogBuilder
-                .setMessage("Do you want to Exit??")
-                .setCancelable(false)
-                .setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                                activity.finish();
-                                Intent end_intent = new Intent(context, EndingActivity.class);
-                                end_intent.putExtra("check", false);
-                                context.startActivity(end_intent);
-                            }
-                        });
-        alertDialogBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
 
     protected void showCurrentLocation() {
 
@@ -254,6 +123,12 @@ public class MainApp extends Application {
             //Toast.makeText(getApplicationContext(), message,
             //Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    public void showGPSCoordinates(View v) {
+        showCurrentLocation();
+
 
     }
 
@@ -311,7 +186,8 @@ public class MainApp extends Application {
     }
 
 
-    public class GPSLocationListener implements LocationListener {
+    private class MyLocationListener implements LocationListener {
+
         public void onLocationChanged(Location location) {
 
             SharedPreferences sharedPref = getSharedPreferences("GPSCoordinates", Context.MODE_PRIVATE);
@@ -322,6 +198,7 @@ public class MainApp extends Application {
             Location bestLocation = new Location("storedProvider");
             bestLocation.setAccuracy(Float.parseFloat(sharedPref.getString("Accuracy", "0")));
             bestLocation.setTime(Long.parseLong(sharedPref.getString(dt, "0")));
+//                bestLocation.setTime(Long.parseLong(dt));
             bestLocation.setLatitude(Float.parseFloat(sharedPref.getString("Latitude", "0")));
             bestLocation.setLongitude(Float.parseFloat(sharedPref.getString("Longitude", "0")));
 
@@ -330,7 +207,9 @@ public class MainApp extends Application {
                 editor.putString("Latitude", String.valueOf(location.getLatitude()));
                 editor.putString("Accuracy", String.valueOf(location.getAccuracy()));
                 editor.putString("Time", String.valueOf(location.getTime()));
-                String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(String.valueOf(location.getTime()))).toString();
+                editor.putString("Time", DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(String.valueOf(location.getTime()))).toString());
+
+//                String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(String.valueOf(location.getTime()))).toString();
 //                Toast.makeText(getApplicationContext(),
 //                        "GPS Commit! LAT: " + String.valueOf(location.getLongitude()) +
 //                                " LNG: " + String.valueOf(location.getLatitude()) +
@@ -340,8 +219,13 @@ public class MainApp extends Application {
 
                 editor.apply();
             }
-        }
 
+
+            Map<String, ?> allEntries = sharedPref.getAll();
+            for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+                Log.d("Map", entry.getKey() + ": " + entry.getValue().toString());
+            }
+        }
 
 
         public void onStatusChanged(String s, int i, Bundle b) {

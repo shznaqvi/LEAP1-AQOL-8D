@@ -31,8 +31,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -119,7 +117,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             String user = b.getString("userName_from_wrapper");
-            MainApp.userName = user;
+            MainApp.username = user;
             finish();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
@@ -191,7 +189,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+/*
         // attaching data adapter to spinner
         spUC.setAdapter(dataAdapter);
         spUC.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -211,7 +209,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
 
 
 //        DB backup
@@ -511,7 +509,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 DatabaseHelper db = new DatabaseHelper(LoginActivity.this);
                 if ((mEmail.equals("dmu@aku") && mPassword.equals("aku?dmu")) || db.Login(mEmail, mPassword)
                         || (mEmail.equals("test1234") && mPassword.equals("test1234"))) {
-                    MainApp.userName = mEmail;
+                    MainApp.username = mEmail;
                     MainApp.admin = mEmail.contains("@");
 
                     finish();
