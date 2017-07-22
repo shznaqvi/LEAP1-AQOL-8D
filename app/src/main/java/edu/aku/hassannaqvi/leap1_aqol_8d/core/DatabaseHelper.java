@@ -236,23 +236,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
         String[] columns = {
-                FormsTable._ID,
+                FormsTable.COLUMN_ID,
                 FormsTable.COLUMN_UID,
                 //FormsContract.FormsTable.COLUMN_IS_NEW,
                 FormsTable.COLUMN_FORMDATE,
                 FormsTable.COLUMN_USERNAME,
-                FormsContract.FormsTable.COLUMN_ISTATUS,
+                FormsTable.COLUMN_ISTATUS,
                 FormsTable.COLUMN_SA,
                 FormsTable.COLUMN_STUDYID,
-                FormsContract.FormsTable.COLUMN_GPSLAT,
-                FormsContract.FormsTable.COLUMN_GPSLNG,
-                FormsContract.FormsTable.COLUMN_GPSDATE,
+                FormsTable.COLUMN_GPSLAT,
+                FormsTable.COLUMN_GPSLNG,
+                FormsTable.COLUMN_GPSDATE,
                 FormsTable.COLUMN_GPSTIME,
-                FormsContract.FormsTable.COLUMN_GPSACC,
+                FormsTable.COLUMN_GPSACC,
                 FormsTable.COLUMN_DEVICETAGID,
                 FormsTable.COLUMN_DEVICEID
         };
-        String whereClause = FormsContract.FormsTable.COLUMN_SYNCED + " is null";
+        String whereClause = FormsTable.COLUMN_SYNCED + " is null";
         String[] whereArgs = null;
         String groupBy = null;
         String having = null;
