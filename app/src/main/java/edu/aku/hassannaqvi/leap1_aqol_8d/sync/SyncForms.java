@@ -74,48 +74,52 @@ public class SyncForms extends AsyncTask<Void, Void, String> {
 
     private String downloadUrl(String myurl) throws IOException {
         String line = "No Response";
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        //  int len = 500;
+
         DatabaseHelper db = new DatabaseHelper(mContext);
-        Collection<FormsContract> forms = db.getUnsyncedForms();
-        Log.d(TAG, String.valueOf(forms.size()));
-        if (forms.size() > 0) {
+        Collection<FormsContract> Forms = db.getUnsyncedForms();
+        Log.d(TAG, String.valueOf(Forms.size()));
+
+        if (Forms.size() > 0) {
+
+            HttpURLConnection connection = null;
             try {
-                URL url = new URL(myurl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(20000 /* milliseconds */);
-                conn.setConnectTimeout(30000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("charset", "utf-8");
-                conn.setUseCaches(false);
-                // Starts the query
-                conn.connect();
-                JSONArray jsonSync = new JSONArray();
-                try {
-                    DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                String request = myurl;
+                //String request = "http://10.1.42.30:3000/Forms";
 
-                    for (FormsContract fc : forms) {
+                URL url = new URL(request);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                int HttpResult = connection.getResponseCode();
+                if (HttpResult == HttpURLConnection.HTTP_OK) {
+                    JSONArray jsonSync = new JSONArray();
+                    connection = (HttpURLConnection) url.openConnection();
 
+                    connection.setDoOutput(true);
+                    connection.setDoInput(true);
+                    connection.setInstanceFollowRedirects(false);
+                    connection.setRequestMethod("POST");
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setRequestProperty("charset", "utf-8");
+                    connection.setUseCaches(false);
+                    connection.connect();
+
+
+                    DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+
+//            pd.setMessage("Total Forms: " );
+
+                    for (FormsContract fc : Forms) {
+                        //if (fc.getIstatus().equals("1")) {
                         jsonSync.put(fc.toJSONObject());
-
+                        //}
                     }
                     wr.writeBytes(jsonSync.toString().replace("\uFEFF", "") + "\n");
-                    //longInfo(jsonSync.toString().replace("\uFEFF", "") + "\n");
+                    longInfo(jsonSync.toString().replace("\uFEFF", "") + "\n");
                     wr.flush();
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
 
-/*===================================================================*/
-                int HttpResult = conn.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK) {
+
                     BufferedReader br = new BufferedReader(new InputStreamReader(
-                            conn.getInputStream(), "utf-8"));
+                            connection.getInputStream(), "utf-8"));
                     StringBuffer sb = new StringBuffer();
 
                     while ((line = br.readLine()) != null) {
@@ -126,8 +130,8 @@ public class SyncForms extends AsyncTask<Void, Void, String> {
                     System.out.println("" + sb.toString());
                     return sb.toString();
                 } else {
-                    System.out.println(conn.getResponseMessage());
-                    return conn.getResponseMessage();
+                    System.out.println(connection.getResponseMessage());
+                    return connection.getResponseMessage();
                 }
             } catch (MalformedURLException e) {
 
@@ -135,13 +139,17 @@ public class SyncForms extends AsyncTask<Void, Void, String> {
             } catch (IOException e) {
 
                 e.printStackTrace();
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
             }
         } else {
             return "No new records to sync";
         }
         return line;
-            /*===================================================================*/
-
     }
 
     protected void onPostExecute(String result) {

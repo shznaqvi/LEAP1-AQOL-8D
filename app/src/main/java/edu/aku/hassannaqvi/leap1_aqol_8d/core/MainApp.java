@@ -198,7 +198,6 @@ public class MainApp extends Application {
             Location bestLocation = new Location("storedProvider");
             bestLocation.setAccuracy(Float.parseFloat(sharedPref.getString("Accuracy", "0")));
             bestLocation.setTime(Long.parseLong(sharedPref.getString(dt, "0")));
-//                bestLocation.setTime(Long.parseLong(dt));
             bestLocation.setLatitude(Float.parseFloat(sharedPref.getString("Latitude", "0")));
             bestLocation.setLongitude(Float.parseFloat(sharedPref.getString("Longitude", "0")));
 
@@ -207,9 +206,7 @@ public class MainApp extends Application {
                 editor.putString("Latitude", String.valueOf(location.getLatitude()));
                 editor.putString("Accuracy", String.valueOf(location.getAccuracy()));
                 editor.putString("Time", String.valueOf(location.getTime()));
-                editor.putString("Time", DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(String.valueOf(location.getTime()))).toString());
-
-//                String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(String.valueOf(location.getTime()))).toString();
+                String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(String.valueOf(location.getTime()))).toString();
 //                Toast.makeText(getApplicationContext(),
 //                        "GPS Commit! LAT: " + String.valueOf(location.getLongitude()) +
 //                                " LNG: " + String.valueOf(location.getLatitude()) +
@@ -218,12 +215,6 @@ public class MainApp extends Application {
 //                        Toast.LENGTH_SHORT).show();
 
                 editor.apply();
-            }
-
-
-            Map<String, ?> allEntries = sharedPref.getAll();
-            for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-                Log.d("Map", entry.getKey() + ": " + entry.getValue().toString());
             }
         }
 

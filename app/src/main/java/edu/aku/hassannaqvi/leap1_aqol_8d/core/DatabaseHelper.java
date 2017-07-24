@@ -57,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             FormsContract.FormsTable.COLUMN_GPSLAT + " TEXT," +
             FormsContract.FormsTable.COLUMN_GPSLNG + " TEXT," +
             FormsContract.FormsTable.COLUMN_GPSDATE + " TEXT," +
-            FormsTable.COLUMN_GPSTIME + " TEXT," +
+//            FormsTable.COLUMN_GPSTIME + " TEXT," +
             FormsContract.FormsTable.COLUMN_GPSACC + " TEXT," +
             FormsContract.FormsTable.COLUMN_DEVICEID + " TEXT," +
             FormsContract.FormsTable.COLUMN_DEVICETAGID + " TEXT," +
@@ -123,11 +123,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(FormsTable.COLUMN_STUDYID, fc.getStudyID());
         values.put(FormsTable.COLUMN_GPSLAT, fc.getGpsLat());
         values.put(FormsTable.COLUMN_GPSLNG, fc.getGpsLng());
-        values.put(FormsTable.COLUMN_GPSTIME, fc.getGpsTime());
+        values.put(FormsTable.COLUMN_GPSDATE, fc.getGpsDT());
         values.put(FormsTable.COLUMN_GPSACC, fc.getGpsAcc());
         values.put(FormsTable.COLUMN_DEVICEID, fc.getDeviceID());
-        values.put(FormsTable.COLUMN_SYNCED, fc.getSynced());
-        values.put(FormsTable.COLUMN_SYNCED_DATE, fc.getSynced_date());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId;
@@ -192,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 FormsTable.COLUMN_GPSLAT,
                 FormsTable.COLUMN_GPSLNG,
                 FormsContract.FormsTable.COLUMN_GPSDATE,
-                FormsTable.COLUMN_GPSTIME,
+//                FormsTable.COLUMN_GPSTIME,
                 FormsContract.FormsTable.COLUMN_GPSACC,
                 FormsContract.FormsTable.COLUMN_DEVICETAGID,
                 FormsContract.FormsTable.COLUMN_DEVICEID,
@@ -238,7 +236,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] columns = {
                 FormsTable.COLUMN_ID,
                 FormsTable.COLUMN_UID,
-                //FormsContract.FormsTable.COLUMN_IS_NEW,
                 FormsTable.COLUMN_FORMDATE,
                 FormsTable.COLUMN_USERNAME,
                 FormsTable.COLUMN_ISTATUS,
@@ -247,12 +244,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 FormsTable.COLUMN_GPSLAT,
                 FormsTable.COLUMN_GPSLNG,
                 FormsTable.COLUMN_GPSDATE,
-                FormsTable.COLUMN_GPSTIME,
                 FormsTable.COLUMN_GPSACC,
                 FormsTable.COLUMN_DEVICETAGID,
                 FormsTable.COLUMN_DEVICEID
         };
-        String whereClause = FormsTable.COLUMN_SYNCED + " is null";
+        String whereClause = FormsContract.FormsTable.COLUMN_SYNCED + " is null";
         String[] whereArgs = null;
         String groupBy = null;
         String having = null;
