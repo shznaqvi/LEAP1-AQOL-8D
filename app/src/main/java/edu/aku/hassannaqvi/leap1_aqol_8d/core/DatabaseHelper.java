@@ -186,7 +186,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 FormsContract.FormsTable.COLUMN_ISTATUS,
                 FormsTable.COLUMN_STUDYID,
                 FormsContract.FormsTable.COLUMN_SA,
-                FormsTable.COLUMN_TAGID,
                 FormsTable.COLUMN_GPSLAT,
                 FormsTable.COLUMN_GPSLNG,
                 FormsContract.FormsTable.COLUMN_GPSDATE,

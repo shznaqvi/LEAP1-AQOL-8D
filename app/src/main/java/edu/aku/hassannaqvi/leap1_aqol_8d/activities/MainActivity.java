@@ -22,14 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import edu.aku.hassannaqvi.leap1_aqol_8d.R;
-import edu.aku.hassannaqvi.leap1_aqol_8d.contracts.FormsContract;
 import edu.aku.hassannaqvi.leap1_aqol_8d.core.AndroidDatabaseManager;
 import edu.aku.hassannaqvi.leap1_aqol_8d.core.DatabaseHelper;
 import edu.aku.hassannaqvi.leap1_aqol_8d.core.MainApp;
@@ -106,67 +104,50 @@ public class MainActivity extends Activity {
         }
 
         DatabaseHelper db = new DatabaseHelper(this);
-        Collection<FormsContract> todaysForms = db.getTodayForms();
-        Collection<FormsContract> unsyncedForms = db.getUnsyncedForms();
+
+        //Collection<FormsContract> todaysForms = new ArrayList<>();
+
+        //todaysForms = db.getTodayForms();
 
         rSumText += "TODAY'S RECORDS SUMMARY\r\n";
-
-        rSumText += "=======================\r\n";
+        rSumText += "=======================";
+        rSumText += "\r\n\r\n";
+        //rSumText += "Total Forms Today: " + todaysForms.size();
         rSumText += "\r\n";
-        rSumText += "Total Forms Today: " + todaysForms.size() + "\r\n";
-        rSumText += "\r\n";
-        if (todaysForms.size() > 0) {
-            rSumText += "\tFORMS' LIST: \r\n";
-            String iStatus;
-            rSumText += "--------------------------------------------------\r\n";
-            rSumText += "[ LEAP1_ID ] \t[Form Status] \t[Sync Status]----------\r\n";
-            rSumText += "--------------------------------------------------\r\n";
+        rSumText += "    Forms List: \r\n";
+        String iStatus = "";
+//        for (FormsContract fc : todaysForms) {
+//
+//            switch (fc.getiStatus()) {
+//                case "1":
+//                    iStatus = "Complete";
+//                    break;
+//                case "2":
+//                    iStatus = "House Locked";
+//                    break;
+//                case "3":
+//                    iStatus = "Refused";
+//                    break;
+//                case "4":
+//                    iStatus = "Refused";
+//                    break;
+//            }
+//
+//            rSumText += fc.getLhwCode() + " " + fc.getHouseHold() + " " + iStatus;
+//            rSumText += "\r\n";
+//
+//        }
 
-            for (FormsContract fc : todaysForms) {
-                if (fc.getIstatus() != null) {
-                    switch (fc.getIstatus()) {
-                        case "1":
-                            iStatus = "\tComplete";
-                            break;
-                        case "2":
-                            iStatus = "\tIncomplete";
-                            break;
-                        case "3":
-                            iStatus = "\tRefused";
-                            break;
-                        case "4":
-                            iStatus = "\tRefused";
-                            break;
-                        default:
-                            iStatus = "\tN/A";
-                    }
-                }else {
-                    iStatus = "\tN/A";
-                }
-
-                rSumText += fc.getStudyID();
-
-                rSumText += " " + iStatus + " ";
-
-                rSumText += (fc.getSynced() == null ? "\t\tNot Synced" : "\t\tSynced");
-                rSumText += "\r\n";
-                rSumText += "--------------------------------------------------\r\n";
-            }
-        }
-
+        rSumText += "--------------------------------------------------\r\n";
 
         if (MainApp.admin) {
             adminsec.setVisibility(View.VISIBLE);
             SharedPreferences syncPref = getSharedPreferences("SyncInfo", Context.MODE_PRIVATE);
-            rSumText += "Last Data Download: \t" + syncPref.getString("LastDownSyncServer", "Never Updated");
+            rSumText += "Last Update: " + syncPref.getString("LastUpdate", "Never Updated");
             rSumText += "\r\n";
-            rSumText += "Last Data Upload: \t" + syncPref.getString("LastUpSyncServer", "Never Synced");
-            rSumText += "\r\n";
-            rSumText += "\r\n";
-            rSumText += "Unsynced Forms: \t" + unsyncedForms.size();
+            rSumText += "Last Synced(DB): " + syncPref.getString("LastSyncDB", "Never Synced");
             rSumText += "\r\n";
         }
-        Log.d(TAG, "onCreate: " + rSumText);
         recordSummary.setText(rSumText);
 
 

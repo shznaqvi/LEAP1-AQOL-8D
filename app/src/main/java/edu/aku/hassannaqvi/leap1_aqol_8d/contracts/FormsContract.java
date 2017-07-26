@@ -16,7 +16,7 @@ public class FormsContract {
     //private final String surveyType = "SN";
     private String _ID = "";
     private String _UID = "";
-    private String ISNEW = "";
+    // private String ISNEW = "";
     //  private String DSSID = "";
     private String formDate = ""; // Date
     private String username = ""; // Interviewer
@@ -127,13 +127,13 @@ public class FormsContract {
         this._ID = _ID;
     }
 
-    public String getISNEW() {
+ /*   public String getISNEW() {
         return ISNEW;
     }
 
     public void setISNEW(String ISNEW) {
         this.ISNEW = ISNEW;
-    }
+    }*/
 
     /* public String getDSSID() {
          return DSSID;
@@ -215,13 +215,13 @@ public class FormsContract {
         this.gpsDT = gpsDT;
     }
 
-    public String getGpsTime() {
+   /* public String getGpsTime() {
         return gpsTime;
     }
 
     public void setGpsTime(String gpsTime) {
         this.gpsTime = gpsTime;
-    }
+    }*/
 
     public String getGpsAcc() {
         return gpsAcc;
@@ -271,12 +271,11 @@ public class FormsContract {
         public static final String COLUMN_PROJECT_NAME = "projectname";
         public static final String COLUMN_ID = "_id";
         public static final String COLUMN_UID = "_uid";
-        public static final String COLUMN_IS_NEW = "isnew";
+        //  public static final String COLUMN_IS_NEW = "isnew";
         //        public static final String COLUMN_DSSID = "dssid";
         public static final String COLUMN_FORMDATE = "formdate";
         public static final String COLUMN_USERNAME = "username";
         public static final String COLUMN_ISTATUS = "istatus";
-        public static final String COLUMN_TAGID = "tagid";
         public static final String COLUMN_SA = "sa";
         public static final String COLUMN_STUDYID = "studyid";
         public static final String COLUMN_GPSLAT = "gpslat";
