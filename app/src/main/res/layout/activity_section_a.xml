@@ -20,14 +20,32 @@
             android:background="@color/grayOverlay" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Main" />
+            android:text="@string/sqheading"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:typeface="serif" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:background="@color/grayOverlay" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/pink_100"
+            android:text="@string/sqsub1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            tools:typeface="serif" />
 
         <TextView
             android:layout_width="match_parent"
@@ -46,19 +64,6 @@
             android:inputType="number"
             android:maxLength="10" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/colorPrimaryAlpha"
-            android:text="@string/sectionA"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            tools:typeface="serif" />
 
         <TextView
             android:layout_width="match_parent"
@@ -927,14 +932,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
-                android:text="@string/AQ12a" />
+                android:text="@string/AQ19a" />
 
             <RadioButton
                 android:id="@+id/AQ19b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
-                android:text="@string/AQ12b" />
+                android:text="@string/AQ19b" />
 
             <RadioButton
                 android:id="@+id/AQ19c"
